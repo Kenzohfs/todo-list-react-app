@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from '../layout';
 import Login from '../pages/Login';
 
+import NotFound from '../pages/NotFound';
 import Register from '../pages/Register';
 import PrivatePaths from './privatePaths';
 import PublicPaths from './publicPaths';
@@ -17,7 +18,7 @@ const RouterProvider = () => (
         <Route path={PrivatePaths.HOME} element={<>home</>} />
       </Route>
 
-      <Route path="*" element={<>not found</>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
 );
