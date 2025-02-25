@@ -7,6 +7,7 @@ const theme = {
     gray: '#F3F3F3',
   },
   fontSizes: {
+    xsm: '12px',
     small: '14px',
     default: '16px',
     medium: '18px',
