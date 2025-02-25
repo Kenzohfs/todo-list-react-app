@@ -38,7 +38,7 @@ const Login: React.FC = () => {
             <Divider />
           </DividerContainer>
 
-          <Button Icon={FaGoogle} secondary={true}>
+          <Button Icon={FaGoogle} secondary>
             Continuar com o Google
           </Button>
         </Modal>

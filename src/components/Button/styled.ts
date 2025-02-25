@@ -2,9 +2,9 @@ import { lighten, shade } from "polished";
 import styled, { css } from "styled-components";
 
 interface IButtonProps {
-  small?: boolean;
+  $small?: boolean;
   disabled?: boolean;
-  secondary?: boolean;
+  $secondary?: boolean;
 }
 
 export const Container = styled.button<IButtonProps>`
@@ -35,12 +35,12 @@ export const Container = styled.button<IButtonProps>`
       background-color: ${({ theme }) => theme.colors.gray};
     `}
 
-  ${({ small }) => small && css`
+  ${({ $small }) => $small && css`
     font-size: ${({ theme }) => theme.fontSizes.small};
     padding: 7px 12px;
   `}
 
-  ${({ secondary }) => secondary && css`
+  ${({ $secondary }) => $secondary && css`
     background-color: ${({ theme }) => theme.colors.white};	
     color: ${({ theme }) => theme.colors.black};
     border: 1px solid ${({ theme }) => lighten(0.5, theme.colors.black)};

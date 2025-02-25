@@ -2,22 +2,22 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { IconType } from 'react-icons';
 import { Container, IconContainer } from './styled';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   small?: boolean;
   secondary?: boolean;
   Icon?: IconType;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<IButtonProps> = ({
   small,
-  secondary = false,
+  secondary,
   children,
   Icon,
   ...rest
 }) => {
   return (
-    <Container small={small} secondary={secondary} {...rest}>
+    <Container {...rest} $small={small} $secondary={secondary}>
       {Icon && (
         <IconContainer>
           <Icon size={20} />
