@@ -6,9 +6,10 @@ import theme from './style/theme';
 import './App.css';
 
 function App() {
+
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider />
+        <RouterProvider />
     </ThemeProvider>
   );
 }

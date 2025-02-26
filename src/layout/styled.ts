@@ -10,6 +10,7 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   flex: 1;
+  width: 100%;
   display: flex;
-  border-top: 5px solid ${({ theme }) => theme.colors.green};
+  border-top: 5px solid ${({ theme }) => theme.colors.black};
 `;

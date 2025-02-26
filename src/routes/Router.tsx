@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from '../layout';
 import Login from '../pages/Login';
 
+import Board from '../pages/Board';
 import NotFound from '../pages/NotFound';
 import Register from '../pages/Register';
 import PrivatePaths from './privatePaths';
@@ -15,7 +16,7 @@ const RouterProvider = () => (
       <Route path={PublicPaths.REGISTER} element={<Register />} />
 
       <Route element={<Layout />}>
-        <Route path={PrivatePaths.HOME} element={<>home</>} />
+        <Route path={PrivatePaths.HOME} element={<Board />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
