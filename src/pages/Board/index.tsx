@@ -30,9 +30,9 @@ const Board: React.FC = () => {
       responsable: 'Maria',
       status: 'doing',
     },
-  ]); 
-  
-  function handleDragEnd(event: DragEndEvent) {
+  ]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return;
@@ -48,7 +48,7 @@ const Board: React.FC = () => {
         prev.map((t) => (t.id === draggedTask.id ? updatedTask : t))
       );
     }
-  }
+  };
 
   return (
     <Container>

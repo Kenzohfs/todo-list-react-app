@@ -14,10 +14,11 @@ const Button: React.FC<IButtonProps> = ({
   secondary,
   children,
   Icon,
+  type = 'button',
   ...rest
 }) => {
   return (
-    <Container {...rest} $small={small} $secondary={secondary}>
+    <Container type={type} $small={small} $secondary={secondary} {...rest}>
       {Icon && (
         <IconContainer>
           <Icon size={20} />

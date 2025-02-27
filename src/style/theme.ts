@@ -5,6 +5,7 @@ const theme = {
     blue: '#003AFA',
     orange: '#DF4517',
     gray: '#F3F3F3',
+    error: '#FF6347',
   },
   fontSizes: {
     xsm: '12px',

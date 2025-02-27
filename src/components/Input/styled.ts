@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface IInputContainerProps {
   $small?: boolean;
+  $isError?: boolean;
 }
 
 export const InputContainer = styled.div<IInputContainerProps>`
@@ -17,6 +18,10 @@ export const InputContainer = styled.div<IInputContainerProps>`
   ${({ $small }) => $small && `
     padding: 0.5rem 0.75rem;
   `}
+
+  ${({ theme, $isError }) => $isError && `
+    border-color: ${theme.colors.error};
+  `}
 `;
 
 export const IconContainer = styled.div`
@@ -29,5 +34,11 @@ export const IconContainer = styled.div`
 
 export const InputStyled = styled.input`
   border: none;
+  width: 100%;
   font-size: ${({ theme }) => theme.fontSizes.default};
+`;
+
+export const ErrorContainer = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xsm};
+  color: ${({ theme }) => theme.colors.error};
 `;

@@ -73,3 +73,10 @@ export const DividerText = styled.span`
   color: ${({ theme }) => lighten(0.3, theme.colors.black)};
   text-transform: uppercase;
 `;
+
+export const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;

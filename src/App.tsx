@@ -1,16 +1,15 @@
-import { ThemeProvider } from 'styled-components';
-
 import RouterProvider from './routes/Router';
-import theme from './style/theme';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
-function App() {
+import HooksProvider from './hooks';
 
+function App() {
   return (
-    <ThemeProvider theme={theme}>
-        <RouterProvider />
-    </ThemeProvider>
+    <HooksProvider>
+      <RouterProvider />
+    </HooksProvider>
   );
 }
 
