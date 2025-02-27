@@ -1,7 +1,11 @@
 import { lighten } from 'polished';
 import styled from 'styled-components';
 
-export const InputContainer = styled.div`
+interface IInputContainerProps {
+  $small?: boolean;
+}
+
+export const InputContainer = styled.div<IInputContainerProps>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -9,6 +13,10 @@ export const InputContainer = styled.div`
   border: 1px solid ${({ theme }) => lighten(0.8, theme.colors.black)};
   border-radius: 0.5rem;
   color: ${({ theme }) => theme.colors.black};
+
+  ${({ $small }) => $small && `
+    padding: 0.5rem 0.75rem;
+  `}
 `;
 
 export const IconContainer = styled.div`

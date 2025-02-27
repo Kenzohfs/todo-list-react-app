@@ -8,6 +8,7 @@ interface IButtonProps {
 }
 
 export const Container = styled.button<IButtonProps>`
+  flex: 1;
   display: flex;
   gap: 1rem;
   justify-content: center;

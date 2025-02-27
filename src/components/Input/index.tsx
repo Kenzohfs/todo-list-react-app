@@ -6,16 +6,18 @@ interface InputProps {
   placeholder?: string;
   type?: string;
   Icon?: IconType;
+  small?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
   placeholder = '',
   type = 'text',
   Icon,
+  small,
   ...rest
 }) => {
   return (
-    <InputContainer>
+    <InputContainer $small={small}>
       {Icon && (
         <IconContainer>
           <Icon size={20} />
