@@ -14,6 +14,7 @@ import { useToast } from '../toast';
 interface IAuthContextData {
   signIn(loginData: ILoginData): Promise<ILoginResponse>;
   register(registerData: IRegisterData): Promise<IRegisterResponse>;
+  isAuthenticated: () => boolean;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -68,8 +69,12 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     },
   }).mutateAsync;
 
+  const isAuthenticated = () => {
+    return !!localStorage.getItem(StorageKeys.token);
+  };
+
   return (
-    <AuthContext.Provider value={{ signIn, register }}>
+    <AuthContext.Provider value={{ signIn, register, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

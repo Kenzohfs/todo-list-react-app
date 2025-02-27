@@ -7,6 +7,7 @@ import Board from '../pages/Board';
 import NotFound from '../pages/NotFound';
 import Register from '../pages/Register';
 import PrivatePaths from './privatePaths';
+import PrivatePathWrapper from './PrivatePathWrapper';
 import PublicPaths from './publicPaths';
 
 const RouterProvider = () => (
@@ -15,8 +16,10 @@ const RouterProvider = () => (
       <Route path={PublicPaths.LOGIN} element={<Login />} />
       <Route path={PublicPaths.REGISTER} element={<Register />} />
 
-      <Route element={<Layout />}>
-        <Route path={PrivatePaths.HOME} element={<Board />} />
+      <Route element={<PrivatePathWrapper />}>
+        <Route element={<Layout />}>
+          <Route path={PrivatePaths.HOME} element={<Board />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />
