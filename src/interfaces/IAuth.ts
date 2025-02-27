@@ -27,4 +27,10 @@ export const RegisterSchema: Yup.ObjectSchema<IRegisterData> =
     email: Yup.string().email("Email precisa ser válido").required("Email é obrigatório"),
     password: Yup.string().min(8, "Mínimo de 8 caracteres").required("Senha é obrigatória"),
     name: Yup.string().required("Nome é obrigatório"),
-  })
+  });
+
+export const LoginSchema: Yup.ObjectSchema<ILoginData> =
+  Yup.object().shape({
+    email: Yup.string().email("Email precisa ser válido").required("Email é obrigatório"),
+    password: Yup.string().required("Senha é obrigatória"),
+  });

@@ -1,8 +1,14 @@
-import React from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaGoogle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
+import { ILoginData, LoginSchema } from '../../interfaces/IAuth';
+import PrivatePaths from '../../routes/privatePaths';
 import PublicPaths from '../../routes/publicPaths';
 import {
   Container,
@@ -10,6 +16,7 @@ import {
   Divider,
   DividerContainer,
   DividerText,
+  Form,
   LinkStyled,
   Modal,
   RegisterText,
@@ -18,11 +25,28 @@ import {
 } from './styled';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const { addToast } = useToast();
   const { signIn } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginData>({
+    resolver: yupResolver(LoginSchema),
+  });
 
-  const onSignInClick = () => {
-    signIn({ email: 'email', password: 'password' });
-  };
+  const handleValidationError = useCallback(() => {
+    addToast({
+      type: 'error',
+      description: 'Por favor, preencha todos os campos corretamente',
+    });
+  }, [addToast]);
+
+  const onSubmit = handleSubmit(async (data: ILoginData) => {
+    await signIn(data);
+    navigate(PrivatePaths.HOME);
+  }, handleValidationError);
 
   return (
     <Container>
@@ -30,9 +54,27 @@ const Login: React.FC = () => {
       <Content>
         <Modal>
           <Welcome>Que bom que você voltou</Welcome>
-          <Input name="email" placeholder="Endereço de email" />
-          <Input name="password" placeholder="Senha" type="password" />
-          <Button onClick={onSignInClick}>Entrar</Button>
+          <Form id="login-form" onSubmit={onSubmit}>
+            <Input
+              register={register}
+              name="email"
+              errors={errors.email}
+              placeholder="Endereço de email"
+              autoComplete="username"
+            />
+            <Input
+              register={register}
+              name="password"
+              errors={errors.password}
+              placeholder="Senha"
+              type="password"
+              autoComplete="current-password"
+            />
+
+            <Button form="login-form" type="submit">
+              Entrar
+            </Button>
+          </Form>
 
           <RegisterText>
             Não tem uma conta?{' '}

@@ -10,7 +10,7 @@ import {
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
   placeholder?: string;
   type?: string;
   Icon?: IconType;
@@ -28,6 +28,8 @@ const Input: React.FC<InputProps> = ({
   errors,
   ...rest
 }) => {
+  const registeredProps = register ? register(name) : {};
+
   return (
     <div>
       <InputContainer $small={small} $isError={!!errors}>
@@ -37,7 +39,7 @@ const Input: React.FC<InputProps> = ({
           </IconContainer>
         )}
         <InputStyled
-          {...register(name)}
+          {...registeredProps}
           placeholder={placeholder}
           type={type}
           {...rest}

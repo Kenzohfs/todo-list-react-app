@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { createContext, useContext } from 'react';
+import { StorageKeys } from '../../consts/storageKeys';
 import { IApiError } from '../../interfaces/IApiError';
 import {
   ILoginData,
@@ -27,12 +28,23 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const signIn = useMutation({
     mutationFn: async (loginData: ILoginData) => {
       const { data } = await api.post<ILoginResponse>('/auth/login', loginData);
+      handleLoginToken(data.token);
 
       addToast({ type: 'success', description: 'Login realizado com sucesso' });
 
       return data;
     },
+    onError: (error: IApiError) => {
+      console.error('Error signing in', error);
+      const errDescription = error.response?.data.message || error.message;
+
+      addToast({ type: 'error', description: errDescription });
+    },
   }).mutateAsync;
+
+  const handleLoginToken = (token: string) => {
+    localStorage.setItem(StorageKeys.token, token);
+  };
 
   const register = useMutation({
     mutationFn: async (registerData: IRegisterData) => {
