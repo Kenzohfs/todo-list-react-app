@@ -4,6 +4,8 @@ import { ThemeProvider } from 'styled-components';
 import { queryClient } from '../services/queryClient';
 import theme from '../style/theme';
 import { AuthProvider } from './auth';
+import { StatusProvider } from './status';
+import { TaskProvider } from './task';
 import { ToastProvider } from './toast';
 
 interface IHooksProviderProps {
@@ -15,7 +17,11 @@ const HooksProvider: React.FC<IHooksProviderProps> = ({ children }) => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <ToastProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <StatusProvider>
+              <TaskProvider>{children}</TaskProvider>
+            </StatusProvider>
+          </AuthProvider>
         </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>

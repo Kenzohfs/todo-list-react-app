@@ -9,5 +9,6 @@ export const queryClient = new QueryClient({
 });
 
 export enum QueryKeys {
-
+  GET_STATUS = 'GET_STATUS',
+  GET_TASKS = 'GET_TASKS',
 }
