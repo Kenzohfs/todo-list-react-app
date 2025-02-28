@@ -37,7 +37,7 @@ O aplicativo frontend permite que os usuários visualizem, criem, atualizem e ex
 
 ## Pré-requisitos
 
-- [Node.js](https://nodejs.org/) (versão 14 ou superior)
+- [Node.js](https://nodejs.org/) (versão 20 ou superior)
 - [npm](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/)
 
 ## Instalação e Configuração
