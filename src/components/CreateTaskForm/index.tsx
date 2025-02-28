@@ -1,65 +1,81 @@
-import React, { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useStatus } from '../../hooks/status';
+import { useTask } from '../../hooks/task';
+import { useToast } from '../../hooks/toast';
+import { ITaskData, TaskSchema } from '../../interfaces/ITask';
 import Input from '../Input';
-import SelectComp, { IOption } from '../Select';
-import { AssignMe, AssignMeText, Field, FormContainer, Label } from './styled';
+import SelectComp from '../Select';
+import { Field, FormContainer, Label } from './styled';
 
-interface ICreateTaskFormProps {}
+interface ICreateTaskFormProps {
+  onSuccess: () => void;
+}
 
-const CreateTaskForm: React.FC<ICreateTaskFormProps> = () => {
-  const [selectedOption, setSelectedOption] = useState<IOption | null>(null);
+const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
+  const { addToast } = useToast();
+  const { GetStatus } = useStatus();
+  const { CreateTask } = useTask();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ITaskData>({
+    resolver: yupResolver(TaskSchema),
+  });
 
-  const handleSelectChange = (option: IOption | null) => {
-    setSelectedOption(option);
-    console.log('Valor selecionado:', option);
-  };
+  const { data: statusData } = GetStatus();
 
-  const onAssignToMeClick = () => {};
+  const statusOptions = useMemo(() => {
+    if (!statusData) return [];
+
+    return statusData.map((status) => ({
+      value: status.id,
+      label: status.description,
+    }));
+  }, [statusData]);
+
+  const handleValidationError = useCallback(() => {
+    addToast({
+      type: 'error',
+      description: 'Por favor, preencha todos os campos corretamente',
+    });
+  }, [addToast]);
+
+  const onSubmit = handleSubmit(async (data: ITaskData) => {
+    await CreateTask(data);
+    onSuccess();
+  }, handleValidationError);
 
   return (
-    <FormContainer>
+    <FormContainer id="task-form" onSubmit={onSubmit}>
       <Field>
         <Label>Título*</Label>
-        <Input small />
+        <Input name="title" register={register} errors={errors.title} small />
       </Field>
 
       <Field>
         <Label>Status*</Label>
         <SelectComp
-          options={[
-            { value: '1', label: 'To Do' },
-            { value: '2', label: 'Doing' },
-            { value: '3', label: 'Done' },
-          ]}
-          value={selectedOption}
-          onChange={handleSelectChange}
+          name="statusId"
+          options={statusOptions}
+          control={control}
           placeholder="Selecione o status"
-          isClearable
-        />
-      </Field>
-
-      <Field>
-        <Label>Tipo de item*</Label>
-        <SelectComp
-          options={[
-            { value: '1', label: 'To Do' },
-            { value: '2', label: 'Doing' },
-            { value: '3', label: 'Done' },
-          ]}
-          value={selectedOption}
-          onChange={handleSelectChange}
-          placeholder="Selecione o status"
+          errors={errors.statusId}
           isClearable
         />
       </Field>
 
       <Field>
         <Label>Responsável</Label>
-        <Input small />
-        <AssignMe>
-          <AssignMeText onClick={onAssignToMeClick}>
-            Atribuir a mim
-          </AssignMeText>
-        </AssignMe>
+        <Input
+          name="responsable"
+          register={register}
+          errors={errors.responsable}
+          small
+        />
       </Field>
     </FormContainer>
   );

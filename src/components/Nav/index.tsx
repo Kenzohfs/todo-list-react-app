@@ -24,11 +24,6 @@ const Nav = () => {
     setOpenCreateTask(false);
   };
 
-  const handleCreateTask = () => {
-    console.log('Criar tarefa');
-    setOpenCreateTask(false);
-  };
-
   return (
     <NavContainer>
       <Item>
@@ -50,9 +45,13 @@ const Nav = () => {
         isOpen={openCreateTask}
         onClose={handleCloseModal}
         title="Tarefa"
-        footer={<Button onClick={handleCreateTask}>Criar</Button>}
+        footer={
+          <Button type="submit" form="task-form">
+            Criar
+          </Button>
+        }
       >
-        <CreateTaskForm />
+        <CreateTaskForm onSuccess={handleCloseModal} />
       </Modal>
     </NavContainer>
   );

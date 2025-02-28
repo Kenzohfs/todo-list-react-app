@@ -1,70 +1,100 @@
-import React from 'react';
-import Select, { SingleValue, StylesConfig, ThemeConfig } from 'react-select';
+import React, { useMemo } from 'react';
+import { Control, FieldError, useController } from 'react-hook-form';
+import Select, {
+  Props as ReactSelectProps,
+  StylesConfig,
+  ThemeConfig,
+} from 'react-select';
 import theme from '../../style/theme';
+import { ErrorContainer } from './styled';
 
 export interface IOption {
-  value: string;
+  value: string | boolean | number;
   label: string;
 }
 
-interface ISelectComp {
+interface ISelectComp extends ReactSelectProps {
   options: IOption[];
-  value?: IOption | null;
-  onChange?: (value: IOption | null) => void;
+  onChangeValue?: (value: IOption | null) => void;
   placeholder?: string;
   isClearable?: boolean;
+  control?: Control<any>;
+  errors?: FieldError;
+  name: string;
 }
+
+const defaultStyles: StylesConfig<IOption, false> = {
+  control: (provided) => ({
+    ...provided,
+    minHeight: '43px',
+    borderColor: '#ccc',
+    borderRadius: '8px',
+    boxShadow: 'none',
+    '&:hover': {
+      borderColor: '#aaa',
+    },
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: '#999',
+  }),
+};
+
+const defaultTheme: ThemeConfig = (selectTheme) => ({
+  ...selectTheme,
+  borderRadius: 8,
+  colors: {
+    ...selectTheme.colors,
+    primary25: theme.colors.white,
+    primary: theme.colors.orange,
+  },
+});
 
 const SelectComp: React.FC<ISelectComp> = ({
   options,
-  value,
-  onChange,
+  onChangeValue,
   placeholder = 'Selecione...',
   isClearable = false,
+  onChange,
+  control,
+  errors,
+  name,
 }) => {
-  const handleChange = (selectedOption: SingleValue<IOption>) => {
-    if (onChange) {
-      onChange(selectedOption || null);
-    }
-  };
+  const {
+    field: { value, onChange: controlOnChange, ...restSelectField },
+  } = useController({ name, control });
 
-  const defaultStyles: StylesConfig<IOption, false> = {
-    control: (provided) => ({
-      ...provided,
-      minHeight: '43px',
-      borderColor: '#ccc',
-      borderRadius: '8px',
-      boxShadow: 'none',
-      '&:hover': {
-        borderColor: '#aaa',
-      },
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: '#999',
-    }),
-  };
+  const defaultStylesMemo = useMemo(() => {
+    if (!errors) return defaultStyles;
 
-  const defaultTheme: ThemeConfig = (selectTheme) => ({
-    ...selectTheme,
-    borderRadius: 8,
-    colors: {
-      ...selectTheme.colors,
-      primary25: theme.colors.white,
-      primary: theme.colors.orange,
-    },
-  });
+    return {
+      ...defaultStyles,
+      control: (provided) => ({
+        ...provided,
+        borderColor: theme.colors.error,
+      }),
+    };
+  }, [errors]);
 
   return (
-    <Select
-      options={options}
-      value={value}
-      onChange={handleChange}
-      placeholder={placeholder}
-      isClearable={isClearable}
-      styles={defaultStyles}
-      theme={defaultTheme}
-    />
+    <div>
+      <Select
+        options={options}
+        value={options.find((option) => option.value === value)}
+        placeholder={placeholder}
+        isClearable={isClearable}
+        styles={defaultStylesMemo}
+        theme={defaultTheme}
+        onChange={(option: any, _: any) => {
+          controlOnChange(option ? option.value : null);
+          if (onChange && onChangeValue) {
+            onChangeValue(option);
+          }
+        }}
+        {...restSelectField}
+      />
+      {errors?.message && <ErrorContainer>{errors.message}</ErrorContainer>}
+    </div>
   );
 };
 

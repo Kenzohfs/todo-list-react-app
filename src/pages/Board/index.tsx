@@ -6,14 +6,14 @@ import Input from '../../components/Input';
 import Task from '../../components/Task';
 import { useStatus } from '../../hooks/status';
 import { useTask } from '../../hooks/task';
-import { ITask } from '../../interfaces/ITask';
+import { ITaskResponse } from '../../interfaces/ITask';
 import { BoardContent, Container, HeaderContent, Title } from './styled';
 
 interface ITaskByStatus {
   statusId: string;
   statusDescription: string;
   statusCreatedAt: number;
-  tasks: ITask[];
+  tasks: ITaskResponse[];
 }
 
 const Board: React.FC = () => {
@@ -41,7 +41,14 @@ const Board: React.FC = () => {
       return acc;
     }, []);
 
-    return newData.sort((a, b) => a.statusCreatedAt - b.statusCreatedAt);
+    newData.sort((a, b) => a.statusCreatedAt - b.statusCreatedAt);
+    newData.forEach((status) => {
+      status.tasks.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    });
+    return newData;
   }, [taskData, statusData]);
 
   const handleDragEnd = useCallback(
