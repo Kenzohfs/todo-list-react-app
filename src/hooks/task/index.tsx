@@ -1,10 +1,12 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { time } from '../../consts/time';
+import { wsTopics } from '../../consts/wsTopics';
 import { IApiError } from '../../interfaces/IApiError';
 import { ITask, ITaskData, ITaskResponse } from '../../interfaces/ITask';
 import { api } from '../../services/api';
 import { queryClient, QueryKeys } from '../../services/queryClient';
+import { useSocket } from '../socket';
 import { useToast } from '../toast';
 
 interface ITaskContextData {
@@ -26,6 +28,7 @@ interface ITaskUpdateMutationParams {
 
 const TaskProvider: React.FC<ITaskProviderProps> = ({ children }) => {
   const { addToast } = useToast();
+  const socket = useSocket();
 
   const GetTasks = (): UseQueryResult<ITask[]> =>
     useQuery({
@@ -59,6 +62,7 @@ const TaskProvider: React.FC<ITaskProviderProps> = ({ children }) => {
 
       addToast({ type: 'success', description: 'Tarefa criada com sucesso' });
 
+      socket?.emit(wsTopics.taskCreated, data);
       return data;
     },
     onError: (error: IApiError) => {
@@ -73,6 +77,7 @@ const TaskProvider: React.FC<ITaskProviderProps> = ({ children }) => {
     mutationFn: async ({ id, task }: ITaskUpdateMutationParams) => {
       const { data } = await api.put<ITaskResponse>(`/tasks/${id}`, task);
 
+      socket?.emit(wsTopics.taskUpdated, data);
       return data;
     },
     onMutate: async ({ id, task }) => {
@@ -108,10 +113,29 @@ const TaskProvider: React.FC<ITaskProviderProps> = ({ children }) => {
 
       queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
-    },
   }).mutateAsync;
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on(wsTopics.taskCreated, (_) => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
+    });
+
+    socket.on(wsTopics.taskUpdated, (_) => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
+    });
+
+    socket.on(wsTopics.taskDeleted, (_) => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
+    });
+
+    return () => {
+      socket.off(wsTopics.taskCreated);
+      socket.off(wsTopics.taskUpdated);
+      socket.off(wsTopics.taskDeleted);
+    };
+  }, [socket, queryClient]);
 
   return (
     <TaskContext.Provider value={{ GetTasks, CreateTask, UpdateTask }}>

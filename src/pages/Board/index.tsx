@@ -1,8 +1,6 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import React, { useCallback, useMemo } from 'react';
-import { FaSearch } from 'react-icons/fa';
 import ColumnStatus from '../../components/ColumnStatus';
-import Input from '../../components/Input';
 import Task from '../../components/Task';
 import { useStatus } from '../../hooks/status';
 import { useTask } from '../../hooks/task';
@@ -76,7 +74,6 @@ const Board: React.FC = () => {
     <Container>
       <HeaderContent>
         <Title>Quadro</Title>
-        <Input name="search" Icon={FaSearch} placeholder="Nome tarefa" />
       </HeaderContent>
 
       <DndContext onDragEnd={handleDragEnd}>
