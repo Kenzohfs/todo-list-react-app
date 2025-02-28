@@ -19,6 +19,7 @@ interface IAuthContextData {
   register(registerData: IRegisterData): Promise<IRegisterResponse>;
   isAuthenticated: () => boolean;
   signInWithGoogle(): Promise<string>;
+  signOut(): void;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -98,9 +99,13 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     }
   };
 
+  const signOut = () => {
+    localStorage.removeItem(StorageKeys.token);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ signIn, register, isAuthenticated, signInWithGoogle }}
+      value={{ signIn, register, isAuthenticated, signInWithGoogle, signOut }}
     >
       {children}
     </AuthContext.Provider>
