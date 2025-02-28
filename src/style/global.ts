@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
+import { darken } from "polished";
 import theme from "./theme";
 
 const globalStyle = createGlobalStyle`
@@ -17,7 +18,7 @@ const globalStyle = createGlobalStyle`
 
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
-      background-color: ${theme.colors.gray};
+      background-color: ${darken(0.3, theme.colors.gray)};
     }
 
     &::-webkit-scrollbar {

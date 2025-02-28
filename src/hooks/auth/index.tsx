@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { signInWithPopup } from 'firebase/auth';
 import React, { createContext, useContext } from 'react';
+import { auth, provider } from '../../config/firebase';
 import { StorageKeys } from '../../consts/storageKeys';
 import { IApiError } from '../../interfaces/IApiError';
 import {
@@ -15,6 +17,7 @@ interface IAuthContextData {
   signIn(loginData: ILoginData): Promise<ILoginResponse>;
   register(registerData: IRegisterData): Promise<IRegisterResponse>;
   isAuthenticated: () => boolean;
+  signInWithGoogle(): Promise<string>;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -73,8 +76,31 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     return !!localStorage.getItem(StorageKeys.token);
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+
+      await api.post('/auth/google', { token: idToken });
+      handleLoginToken(idToken);
+
+      addToast({
+        type: 'success',
+        description: 'Login realizado com sucesso',
+      });
+
+      return idToken;
+    } catch (error) {
+      console.error('Erro ao autenticar com Google:', error);
+      addToast({ type: 'error', description: 'Erro ao autenticar com Google' });
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ signIn, register, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ signIn, register, isAuthenticated, signInWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );

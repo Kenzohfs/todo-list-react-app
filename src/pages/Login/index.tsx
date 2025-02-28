@@ -27,7 +27,7 @@ import {
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const {
     register,
     handleSubmit,
@@ -47,6 +47,11 @@ const Login: React.FC = () => {
     await signIn(data);
     navigate(PrivatePaths.HOME);
   }, handleValidationError);
+
+  const onGoogleClick = async () => {
+    await signInWithGoogle();
+    navigate(PrivatePaths.HOME);
+  };
 
   return (
     <Container>
@@ -87,7 +92,7 @@ const Login: React.FC = () => {
             <Divider />
           </DividerContainer>
 
-          <Button Icon={FaGoogle} secondary>
+          <Button Icon={FaGoogle} secondary onClick={onGoogleClick}>
             Continuar com o Google
           </Button>
         </Modal>
