@@ -1,18 +1,28 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+
+import Layout from '../layout';
+import Login from '../pages/Login';
+
+import Board from '../pages/Board';
+import NotFound from '../pages/NotFound';
+import Register from '../pages/Register';
 import PrivatePaths from './privatePaths';
+import PrivatePathWrapper from './PrivatePathWrapper';
 import PublicPaths from './publicPaths';
 
 const RouterProvider = () => (
   <BrowserRouter>
     <Routes>
-      <Route path={PublicPaths.LOGIN} element={<>login</>} />
-      <Route path={PublicPaths.REGISTER} element={<>register</>} />
+      <Route path={PublicPaths.LOGIN} element={<Login />} />
+      <Route path={PublicPaths.REGISTER} element={<Register />} />
 
-      <Route element={<>layout</>}>
-        <Route path={PrivatePaths.HOME} element={<>home</>} />
+      <Route element={<PrivatePathWrapper />}>
+        <Route element={<Layout />}>
+          <Route path={PrivatePaths.HOME} element={<Board />} />
+        </Route>
       </Route>
 
-      <Route path="*" element={<>not found</>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
 );

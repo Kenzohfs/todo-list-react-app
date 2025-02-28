@@ -1,15 +1,15 @@
-import { ThemeProvider } from 'styled-components';
-
 import RouterProvider from './routes/Router';
-import theme from './style/theme';
 
-import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './config/firebase';
+
+import HooksProvider from './hooks';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <HooksProvider>
       <RouterProvider />
-    </ThemeProvider>
+    </HooksProvider>
   );
 }
 
