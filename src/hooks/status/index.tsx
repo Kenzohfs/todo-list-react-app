@@ -28,7 +28,7 @@ const StatusProvider: React.FC<IStatusProviderProps> = ({ children }) => {
         try {
           const { data } = await api.get<IStatus[]>('/status');
 
-          return data;
+          return data || [];
         } catch (err: any) {
           addToast({
             type: 'error',

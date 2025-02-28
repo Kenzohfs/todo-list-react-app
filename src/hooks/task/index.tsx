@@ -73,20 +73,43 @@ const TaskProvider: React.FC<ITaskProviderProps> = ({ children }) => {
     mutationFn: async ({ id, task }: ITaskUpdateMutationParams) => {
       const { data } = await api.put<ITaskResponse>(`/tasks/${id}`, task);
 
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
-
-      addToast({
-        type: 'success',
-        description: 'Tarefa atualizada com sucesso',
-      });
-
       return data;
     },
-    onError: (error: IApiError) => {
-      console.error('Error updating task', error);
-      const errDescription = error.response?.data.message || error.message;
+    onMutate: async ({ id, task }) => {
+      await queryClient.cancelQueries({ queryKey: [QueryKeys.GET_TASKS] });
 
+      const previousTasks = queryClient.getQueryData<ITaskResponse[]>([
+        QueryKeys.GET_TASKS,
+      ]);
+
+      queryClient.setQueryData<ITaskResponse[]>(
+        [QueryKeys.GET_TASKS],
+        (oldTasks) => {
+          if (!oldTasks) return [];
+          return oldTasks.map((taskItem) =>
+            taskItem.id === id
+              ? { ...taskItem, ...task, updating: true }
+              : taskItem
+          );
+        }
+      );
+
+      return { previousTasks };
+    },
+    onError: (error: IApiError, _, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData<ITaskResponse[]>(
+          [QueryKeys.GET_TASKS],
+          context.previousTasks
+        );
+      }
+      const errDescription = error.response?.data.message || error.message;
       addToast({ type: 'error', description: errDescription });
+
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_TASKS] });
     },
   }).mutateAsync;
 
