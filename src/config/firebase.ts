@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { env } from './env';
-console.log('Variáveis de ambiente:', env);
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,

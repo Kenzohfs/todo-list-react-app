@@ -5,6 +5,7 @@ import { auth, provider } from '../../config/firebase';
 import { StorageKeys } from '../../consts/storageKeys';
 import { IApiError } from '../../interfaces/IApiError';
 import {
+  IGoogleResponse,
   ILoginData,
   ILoginResponse,
   IRegisterData,
@@ -81,7 +82,7 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
 
-      await api.post('/auth/google', { token: idToken });
+      await api.post<IGoogleResponse>('/auth/google', { token: idToken });
       handleLoginToken(idToken);
 
       addToast({

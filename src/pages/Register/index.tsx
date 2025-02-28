@@ -8,6 +8,7 @@ import Input from '../../components/Input';
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 import { IRegisterData, RegisterSchema } from '../../interfaces/IAuth';
+import PrivatePaths from '../../routes/privatePaths';
 import PublicPaths from '../../routes/publicPaths';
 import {
   Container,
@@ -26,7 +27,7 @@ import {
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { register: authRegister } = useAuth();
+  const { register: authRegister, signInWithGoogle } = useAuth();
   const {
     register,
     handleSubmit,
@@ -46,6 +47,11 @@ const Register: React.FC = () => {
     await authRegister(data);
     navigate(PublicPaths.LOGIN);
   }, handleValidationError);
+
+  const onGoogleClick = async () => {
+    await signInWithGoogle();
+    navigate(PrivatePaths.HOME);
+  };
 
   return (
     <Container>
@@ -92,7 +98,7 @@ const Register: React.FC = () => {
             <Divider />
           </DividerContainer>
 
-          <Button Icon={FaGoogle} secondary>
+          <Button Icon={FaGoogle} secondary onClick={onGoogleClick}>
             Continuar com o Google
           </Button>
         </Modal>

@@ -22,6 +22,15 @@ export interface IRegisterResponse {
   createdAt: string;
 }
 
+export interface IGoogleResponse {
+  message: string;
+  user: {
+    uid: string;
+    email: string;
+    displayName: string;
+  }
+}
+
 export const RegisterSchema: Yup.ObjectSchema<IRegisterData> =
   Yup.object().shape({
     email: Yup.string().email("Email precisa ser válido").required("Email é obrigatório"),
