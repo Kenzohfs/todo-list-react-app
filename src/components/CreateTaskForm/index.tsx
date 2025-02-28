@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useCallback, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { useStatus } from '../../hooks/status';
 import { useTask } from '../../hooks/task';
 import { useToast } from '../../hooks/toast';
@@ -23,7 +23,7 @@ const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<ITaskData>({
-    resolver: yupResolver(TaskSchema),
+    resolver: yupResolver(TaskSchema) as unknown as Resolver<ITaskData>,
   });
 
   const { data: statusData } = GetStatus();
@@ -50,10 +50,23 @@ const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
   }, handleValidationError);
 
   return (
-    <FormContainer id="task-form" onSubmit={onSubmit}>
+    <FormContainer
+      id="task-form"
+      aria-label="task-form"
+      role="form"
+      name=""
+      onSubmit={onSubmit}
+      data-testid="task-form"
+    >
       <Field>
         <Label>Título*</Label>
-        <Input name="title" register={register} errors={errors.title} small />
+        <Input
+          name="title"
+          register={register}
+          errors={errors.title}
+          small
+          data-testid="title"
+        />
       </Field>
 
       <Field>
@@ -65,6 +78,7 @@ const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
           placeholder="Selecione o status"
           errors={errors.statusId}
           isClearable
+          data-testid="statusId"
         />
       </Field>
 
@@ -75,6 +89,7 @@ const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
           register={register}
           errors={errors.responsable}
           small
+          data-testid="responsable"
         />
       </Field>
     </FormContainer>

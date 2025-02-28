@@ -26,9 +26,8 @@ export interface ITaskResponse {
   createdAt: string;
 }
 
-export const TaskSchema: Yup.ObjectSchema<ITaskData> =
-  Yup.object().shape({
-    title: Yup.string().required('O título é obrigatório'),
-    responsable: Yup.string().required('O responsável é obrigatório'),
-    statusId: Yup.string().required('O status é obrigatório'),
-  });
+export const TaskSchema = Yup.object({
+  title: Yup.string().required('O título é obrigatório').defined(),
+  responsable: Yup.string().required('O responsável é obrigatório').defined(),
+  statusId: Yup.string().required('O status é obrigatório').defined(),
+}).defined();

@@ -2,7 +2,7 @@ import { Item, LogoContainer, LogoImg, NavContainer } from './styled';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../../assets/logo.svg';
+import Logo from '../../assets/logo.png';
 import { useAuth } from '../../hooks/auth';
 import PublicPaths from '../../routes/publicPaths';
 import Button from '../Button';

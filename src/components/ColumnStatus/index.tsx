@@ -13,7 +13,7 @@ const ColumnStatus: React.FC<IColumnStatusProps> = ({
   status,
   children,
 }) => {
-  const { isOver, setNodeRef } = useDroppable({ id });
+  const { setNodeRef } = useDroppable({ id });
 
   return (
     <StatusContainer ref={setNodeRef}>
