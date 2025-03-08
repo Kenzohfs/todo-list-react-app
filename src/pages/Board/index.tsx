@@ -91,6 +91,7 @@ const Board: React.FC = () => {
                     id={task.id}
                     title={task.title}
                     responsable={task.responsable}
+                    team={task.team}
                   />
                 ))}
               </ColumnStatus>

@@ -92,6 +92,16 @@ const CreateTaskForm: React.FC<ICreateTaskFormProps> = ({ onSuccess }) => {
           data-testid="responsable"
         />
       </Field>
+
+      <Field>
+        <Label>Time*</Label>
+        <Input
+          name="team"
+          register={register}
+          errors={errors.team}
+          small
+        />
+      </Field>
     </FormContainer>
   );
 };

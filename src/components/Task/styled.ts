@@ -33,3 +33,8 @@ export const TaskResponsable = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.small};
   color: ${({ theme }) => theme.colors.black};  
 `;
+
+export const TaskTeam= styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  color: ${({ theme }) => theme.colors.black};  
+`;

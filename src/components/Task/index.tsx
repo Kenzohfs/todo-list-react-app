@@ -4,6 +4,7 @@ import {
   TaskContainer,
   TaskFooter,
   TaskResponsable,
+  TaskTeam,
   TaskTitle,
 } from './styled';
 
@@ -11,9 +12,10 @@ interface ITaskProps {
   id: string;
   title: string;
   responsable: string;
+  team?: string;
 }
 
-const Task: React.FC<ITaskProps> = ({ id, title, responsable }) => {
+const Task: React.FC<ITaskProps> = ({ id, title, responsable, team = '' }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
   const style = transform
     ? {
@@ -31,6 +33,7 @@ const Task: React.FC<ITaskProps> = ({ id, title, responsable }) => {
       <TaskTitle>{title}</TaskTitle>
       <TaskFooter>
         <TaskResponsable>{responsable}</TaskResponsable>
+        <TaskTeam>{team}</TaskTeam>
       </TaskFooter>
     </TaskContainer>
   );
